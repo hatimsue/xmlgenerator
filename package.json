@@ -1,0 +1,21 @@
+{
+  "name": "xmlgenerator",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "doc": "jsdoc src -d docs"
+  },
+  "devDependencies": {
+    "eslint": "^9.22.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.9",
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^4.1.0"
+  }
+}
