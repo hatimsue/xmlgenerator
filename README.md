@@ -11,7 +11,7 @@ npm install xmlgenerator
 This is a complete example showcasing the core features of the xmlgenerator library:
 
 ```javascript
-import XMLGenerator from 'xmlgenerator'
+import {XMLGenerator} from 'xmlgenerator'
 
 const _ = new XMLGenerator().builder
 
@@ -50,7 +50,7 @@ console.log(xml.$toPrettyXML())
 <summary><strong>Basic usage</strong></summary>
 
 ```javascript
-import XMLGenerator from 'xmlgenerator'
+import {XMLGenerator} from 'xmlgenerator'
 
 const _ = new XMLGenerator().builder
 
@@ -75,7 +75,7 @@ console.log(xmlDocument.$toPrettyXML())
 <details> <summary><strong>With attributes</strong></summary>
 
 ```javascript
-import XMLGenerator from 'xmlgenerator'
+import {XMLGenerator} from 'xmlgenerator'
 
 const _ = new XMLGenerator().builder
 
@@ -103,7 +103,7 @@ console.log(xmlDocument.$toPrettyXML())
 
 ```javascript
 
-import XMLGenerator from 'xmlgenerator'
+import {XMLGenerator} from 'xmlgenerator'
 
 const _ = new XMLGenerator().builder
 
