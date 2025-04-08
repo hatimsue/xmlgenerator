@@ -74,9 +74,7 @@ describe( 'XMLElement', () => {
         const expected =
 `<root>
   text
-  <!--
-  comment
-  -->
+  <!-- comment -->
   <child>
     hello
   </child>

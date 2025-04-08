@@ -1,11 +1,17 @@
 ## Classes
 
 <dl>
+<dt><a href="#XMLBase">XMLBase</a></dt>
+<dd><p>Abstract base class for XML nodes that defines the common interface.</p>
+</dd>
+<dt><a href="#XMLCData">XMLCData</a></dt>
+<dd><p>Represents a CDATA section in an XML document.</p>
+</dd>
 <dt><a href="#XMLComment">XMLComment</a></dt>
 <dd><p>Represents an xml comment</p>
 </dd>
-<dt><a href="#XMLElement">XMLElement</a></dt>
-<dd><p>Represents an XMLelement</p>
+<dt><a href="#XMLElement">XMLElement</a> ⇐ <code><a href="#XMLBase">XMLBase</a></code></dt>
+<dd><p>Represents an XML element node.</p>
 </dd>
 <dt><a href="#XMLGenerator">XMLGenerator</a></dt>
 <dd></dd>
@@ -37,13 +43,68 @@
 ## Typedefs
 
 <dl>
-<dt><a href="#XMLChild">XMLChild</a> : <code>string</code> | <code><a href="#XMLComment">XMLComment</a></code> | <code><a href="#XMLElement">XMLElement</a></code></dt>
-<dd><p>A child node of an XML element: text, a comment, or a nested element.</p>
+<dt><a href="#XMLChild">XMLChild</a> : <code>string</code> | <code><a href="#XMLBase">XMLBase</a></code></dt>
+<dd><p>A child node of an XML element: text or any XML node.</p>
 </dd>
 <dt><a href="#XMLElementOptions">XMLElementOptions</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
+<a name="XMLBase"></a>
+
+## XMLBase
+Abstract base class for XML nodes that defines the common interface.
+
+**Kind**: global class  
+
+* [XMLBase](#XMLBase)
+    * [.toXML()](#XMLBase+toXML) ⇒ <code>string</code>
+    * [.toPrettyXML()](#XMLBase+toPrettyXML) ⇒ <code>string</code>
+
+<a name="XMLBase+toXML"></a>
+
+### xmlBase.toXML() ⇒ <code>string</code>
+Returns the XML string representation of the node.
+Must be implemented by subclasses.
+
+**Kind**: instance method of [<code>XMLBase</code>](#XMLBase)  
+**Returns**: <code>string</code> - XML representation of the node.  
+**Throws**:
+
+- <code>Error</code> If not implemented in the subclass.
+
+<a name="XMLBase+toPrettyXML"></a>
+
+### xmlBase.toPrettyXML() ⇒ <code>string</code>
+Returns the formatted (pretty-printed) XML representation of the node.
+
+**Kind**: instance method of [<code>XMLBase</code>](#XMLBase)  
+**Returns**: <code>string</code> - Formatted XML representation.  
+<a name="XMLCData"></a>
+
+## XMLCData
+Represents a CDATA section in an XML document.
+
+**Kind**: global class  
+
+* [XMLCData](#XMLCData)
+    * [new XMLCData(content)](#new_XMLCData_new)
+    * [.toXML()](#XMLCData+toXML) ⇒ <code>string</code>
+
+<a name="new_XMLCData_new"></a>
+
+### new XMLCData(content)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| content | <code>string</code> | The content of the CDATA section. |
+
+<a name="XMLCData+toXML"></a>
+
+### xmlcData.toXML() ⇒ <code>string</code>
+Returns the CDATA section as an XML string.
+
+**Kind**: instance method of [<code>XMLCData</code>](#XMLCData)  
 <a name="XMLComment"></a>
 
 ## XMLComment
@@ -87,12 +148,13 @@ Returns a formatted (indented and multiline) XML comment string.
 
 <a name="XMLElement"></a>
 
-## XMLElement
-Represents an XMLelement
+## XMLElement ⇐ [<code>XMLBase</code>](#XMLBase)
+Represents an XML element node.
 
 **Kind**: global class  
+**Extends**: [<code>XMLBase</code>](#XMLBase)  
 
-* [XMLElement](#XMLElement)
+* [XMLElement](#XMLElement) ⇐ [<code>XMLBase</code>](#XMLBase)
     * [new XMLElement(options)](#new_XMLElement_new)
     * [.setAttr(key, value)](#XMLElement+setAttr) ⇒ <code>this</code>
     * [.addChild(child)](#XMLElement+addChild) ⇒ <code>this</code>
@@ -106,24 +168,24 @@ Represents an XMLelement
 
 | Param | Type | Description |
 | --- | --- | --- |
-| options | [<code>XMLElementOptions</code>](#XMLElementOptions) | xml element options |
+| options | [<code>XMLElementOptions</code>](#XMLElementOptions) | XML element options |
 
 <a name="XMLElement+setAttr"></a>
 
 ### xmlElement.setAttr(key, value) ⇒ <code>this</code>
-Add an attribute to the xml element
+Adds an attribute to the element.
 
 **Kind**: instance method of [<code>XMLElement</code>](#XMLElement)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>string</code> | attribute name |
-| value | <code>string</code> | attribute value |
+| key | <code>string</code> | Attribute name |
+| value | <code>string</code> | Attribute value |
 
 <a name="XMLElement+addChild"></a>
 
 ### xmlElement.addChild(child) ⇒ <code>this</code>
-add an xml child element to the xml element.
+Adds a child node or text content.
 
 **Kind**: instance method of [<code>XMLElement</code>](#XMLElement)  
 
@@ -134,7 +196,7 @@ add an xml child element to the xml element.
 <a name="XMLElement+addChildren"></a>
 
 ### xmlElement.addChildren(...children) ⇒ <code>this</code>
-add one or more xml children to the xml element.
+Adds one or more child nodes.
 
 **Kind**: instance method of [<code>XMLElement</code>](#XMLElement)  
 
@@ -145,22 +207,21 @@ add one or more xml children to the xml element.
 <a name="XMLElement+toXML"></a>
 
 ### xmlElement.toXML() ⇒ <code>string</code>
-Serializes this XML element and its children into an XML string.
-The resulting string does not include line breaks or indentation.
+Serializes this XML element and its children into a compact XML string.
 
 **Kind**: instance method of [<code>XMLElement</code>](#XMLElement)  
-**Returns**: <code>string</code> - xmlString - A compact XML string representation of the element.  
+**Overrides**: [<code>toXML</code>](#XMLBase+toXML)  
 <a name="XMLElement+toPrettyXML"></a>
 
 ### xmlElement.toPrettyXML(indent) ⇒ <code>string</code>
-Serializes this XML element and its children into a formatted, human-readable XML string.
+Serializes this XML element and its children into a pretty-printed XML string.
 
 **Kind**: instance method of [<code>XMLElement</code>](#XMLElement)  
-**Returns**: <code>string</code> - prettyXML - A formatted XML string with indentation and line breaks.  
+**Overrides**: [<code>toPrettyXML</code>](#XMLBase+toPrettyXML)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| indent | <code>number</code> | <code>0</code> | The current indentation level. Used internally for recursive formatting. |
+| indent | <code>number</code> | <code>0</code> | Indentation level. |
 
 <a name="XMLGenerator"></a>
 
@@ -171,6 +232,7 @@ Serializes this XML element and its children into a formatted, human-readable XM
     * [new XMLGenerator()](#new_XMLGenerator_new)
     * [.createElement(name)](#XMLGenerator+createElement) ⇒ <code>Proxy</code>
     * [.createComment(content)](#XMLGenerator+createComment) ⇒ [<code>XMLComment</code>](#XMLComment)
+    * [.createCData(content)](#XMLGenerator+createCData) ⇒ [<code>XMLCData</code>](#XMLCData)
 
 <a name="new_XMLGenerator_new"></a>
 
@@ -200,6 +262,18 @@ Creates a new XML comment node.
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>string</code> | The text content of the comment. |
+
+<a name="XMLGenerator+createCData"></a>
+
+### xmlGenerator.createCData(content) ⇒ [<code>XMLCData</code>](#XMLCData)
+Creates a new CDATA node.
+
+**Kind**: instance method of [<code>XMLGenerator</code>](#XMLGenerator)  
+**Returns**: [<code>XMLCData</code>](#XMLCData) - - A new CDATA node.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| content | <code>string</code> | The text content of the CDATA section. |
 
 <a name="toXMLGetter"></a>
 
@@ -281,8 +355,8 @@ Validates a tag or attribute name for XML.
 
 <a name="XMLChild"></a>
 
-## XMLChild : <code>string</code> \| [<code>XMLComment</code>](#XMLComment) \| [<code>XMLElement</code>](#XMLElement)
-A child node of an XML element: text, a comment, or a nested element.
+## XMLChild : <code>string</code> \| [<code>XMLBase</code>](#XMLBase)
+A child node of an XML element: text or any XML node.
 
 **Kind**: global typedef  
 <a name="XMLElementOptions"></a>

@@ -27,7 +27,7 @@ describe( 'XMLComment', () => {
 
     test( 'toPrettyXML should handle empty content', () => {
         const comment = new XMLComment( '' )
-        const expected = '<!--\n\n-->'
+        const expected = '<!--  -->'
         expect( comment.toPrettyXML() ).toBe( expected )
     } )
 

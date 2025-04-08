@@ -36,8 +36,18 @@ class XMLComment extends XMLBase {
      */
     toPrettyXML( indent = 0 ) {
         const tab = '  '.repeat( indent )
-        return `${tab}<!--\n${tab}${this.content.split( '\n' ).join( `\n${tab}` )}\n${tab}-->`
+        const lines = this.content.split( '\n' )
+
+        if ( lines.length === 1 ) {
+        // Una sola línea: mostrar en línea
+            return `${tab}<!-- ${lines[0]} -->`
+        } else {
+        // Varias líneas: formato indentado
+            const indented = lines.map( line => `${tab}${line}` ).join( '\n' )
+            return `${tab}<!--\n${indented}\n${tab}-->`
+        }
     }
+
 
 }
 

@@ -2,75 +2,86 @@ import XMLGenerator from '../src/XMLGenerator.js'
 
 const generator = new XMLGenerator()
 const _ = generator.builder
-const InvoiceAuthorization = 'fdasdfadf'
-const AuthorizationPeriod = {
-    StartDate: 'date',
-    EndDate: 'end'
-}
+
+const multilineComment = `
+This XML describes a library system.
+It includes detailed info about libraries, books, and authors.
+All elements are properly namespaced and attributed.
+`
+
 const xml =
-    _.Invoice
-        .$xmlns( 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2' )
-        .$xmlns.cac( 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2' )
-        .$xmlns.cbc( 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2' )
-        .$xmlns.ds( 'http://www.w3.org/2000/09/xmldsig#' )
-        .$xmlns.ext( 'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2' )
-        .$xmlns.xades( 'http://uri.etsi.org/01903/v1.3.2#' )
-        .$xmlns.sts( 'http://uri.etsi.org/01903/v1.4.1#' )
-        .$xmlns.xsi( 'http://www.w3.org/2001/XMLSchema-instance' )(
-            _.ext.UBLExtension(
-                _.ext.ExtensionContent(
-                    _.sts.DianExtensions(
-                        _.sts.InvoiceControl(
-                            _.sts.InvoiceAuthorization( InvoiceAuthorization ),
-                            _.sts.AuthorizationPeriod(
-                                _.cbc.StartDate( AuthorizationPeriod.StartDate ),
-                                _.cbc.EndDate( AuthorizationPeriod.EndDate )
-                            ),
-                            _.sts.AuthorizedInvoices(
-                                _.sts.Prefix( 'SETP' ),
-                                _.sts.From( '990000000' ),
-                                _.sts.To( '995000000' )
-                            )
-                        ),
-                        _.sts.InvoiceSource(
-                            _.cbc.IdentificationCode
-                                .listAgencyID( '6' )
-                                .listAgencyName( 'United Nations Economic Commission for Europe' )
-                                .listSchemeURI( 'urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.1' )(
-                                    'CO'
-                                )
-                        ),
-                        _.sts.SoftwareProvider(
-                            _.sts.ProviderID
-                                .schemeAgencyID( '195' )
-                                .schemeAgencyName( 'CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' )
-                                .schemeID( '4' )
-                                .schemeName( '31' )( '800197268' ),
-                            _.sts.SoftwareID
-                                .schemeAgencyID( '195' )
-                                .schemeAgencyName( 'CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' )(
-                                    '56f2ae4e-9812-4fad-9255-08fcfcd5ccb0'
-                                )
-                        ),
-                        _.sts.SoftwareSecurityCode
-                            .schemeAgencyID( '195' )
-                            .schemeAgencyName( 'CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' )(
-                                'a8d18e4e5aa00b44a0b1f9ef413ad8215116bd3ce91730d580eaed795c83b5a32fe6f0823abc71400b3d59eb542b7de8'
-                            ),
-                        _.sts.AuthorizationProvider(
-                            _.sts.AuthorizationProviderID
-                                .schemeAgencyID( '195' )
-                                .schemeAgencyName( 'CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' )
-                                .schemeID( '4' )
-                                .schemeName( '31' )( '800197268' )
-                        ),
-                        _.sts.QRCode(
-                            'NroFactura=SETP990000002 NitFacturador=800197268 NitAdquiriente=900108281 FechaFactura=2019-06-20 ValorTotalFactura=14024.07 CUFE=941cf36af62dbbc06f105d2a80e9bfe683a90e84960eae4d351cc3afbe8f848c26c39bac4fbc80fa254824c6369ea694 URL=https://catalogo-vpfe-hab.dian.gov.co/Document/FindDocument?documentKey=941cf36af62dbbc06f105d2a80e9bfe683a90e84960eae4d351cc3afbe8f848c26c39bac4fbc80fa254824c6369ea694&partitionKey=co|06|94&emissionDate=20190620'
-                        )
-                    )
-                )
-            )
-        )
+  _.Libraries
+      .$xmlns.lib( 'http://example.org/library' )
+      .$xmlns.book( 'http://example.org/book' )
+      .$xmlns.auth( 'http://example.org/author' )(
 
-console.log( xml.$element.toXML() )
+          _.$comment( multilineComment ),
 
+          _.lib_Library
+              .id( 'LIB001' )
+              .country( 'USA' )
+              .status( 'active' )(
+
+                  _.lib_Name( 'Downtown Public Library' ),
+
+                  _.lib_Location
+                      .city( 'New York' )
+                      .zipcode( '10001' )(
+                          _.lib_Address( '456 Library Ave' ),
+                          _.lib_Phone( '+1 212-555-0198' )
+                      ),
+
+                  _.$comment( 'Books available in the library' ),
+
+                  _.lib_Books(
+                      _.book_Book
+                          .isbn( '9780141439518' )
+                          .language( 'en' )
+                          .status( 'available' )(
+                              _.book_Title( 'Pride and Prejudice' ),
+                              _.book_Author( 'Jane Austen' ),
+                              _.book_Year( '1813' ),
+                              _.book_Genre( 'Classic Literature' )
+                          ),
+
+                      _.book_Book
+                          .isbn( '9780743273565' )
+                          .language( 'en' )
+                          .status( 'checked-out' )(
+                              _.book_Title( 'The Great Gatsby' ),
+                              _.book_Author( 'F. Scott Fitzgerald' ),
+                              _.book_Year( '1925' ),
+                              _.book_Genre( 'Novel' )
+                          ),
+
+                      _.book_Book
+                          .isbn( '9780062315007' )
+                          .language( 'es' )
+                          .status( 'available' )(
+                              _.book_Title( 'One Hundred Years of Solitude' ),
+                              _.book_Author( 'Gabriel García Márquez' ),
+                              _.book_Year( '1967' ),
+                              _.book_Genre( 'Magical Realism' )
+                          )
+                  ),
+
+                  _.$comment( 'Notable authors featured' ),
+
+                  _.lib_Authors(
+                      ...[
+                          { name: 'Jane Austen', country: 'UK', birth: '1775', deceased: '1817' },
+                          { name: 'F. Scott Fitzgerald', country: 'USA', birth: '1896', deceased: '1940' },
+                          { name: 'Gabriel García Márquez', country: 'Colombia', birth: '1927', deceased: '2014' }
+                      ].map( author =>
+                          _.auth_Author
+                              .country( author.country )
+                              .birthYear( author.birth )
+                              .deceasedYear( author.deceased )(
+                                  _['<']( author.name )
+                              )
+                      )
+                  )
+              )
+      )
+
+console.log( xml.$element.toPrettyXML() )
