@@ -1,10 +1,17 @@
+import specialGetters from './specialGetters.js'
 import XMLComment from './XMLComment.js'
 import XMLElement from './XMLElement.js'
 
+/**
+ * @class
+ */
 class XMLGenerator {
+    /**
+     * Initializes the XMLGenerator instance.
+     */
     constructor() {
-        this.declaredNamespaces = new Set()
 
+        this.declaredNamespaces = new Set()
         this._ = new Proxy( {}, {
             get: ( _, tag ) => {
                 if ( tag === 'comment' ) {
@@ -20,9 +27,13 @@ class XMLGenerator {
         } )
     }
 
+    /**
+     * Creates a proxied XML element with the given tag name.
+     * @param {string} name - The tag name of the XML element to create.
+     * @returns {Proxy} - A proxied function that acts as both an element builder and container.
+     */
     createElement( name ) {
         const element = new XMLElement( { name } )
-
         const fn = ( ...args ) => {
             element.addChildren( ...args )
             return proxy
@@ -30,39 +41,33 @@ class XMLGenerator {
 
         const handler = {
             get: ( _, prop ) => {
-                if ( prop === 'toXML' ) return element.toXML.bind( element )
-                if ( prop === 'toPrettyXML' ) return element.toPrettyXML.bind( element )
-
-                if ( prop === 'xmlns' ) {
-                    const nsHandler = {
-                        apply: ( _, __, [url] ) => {
-                            element.setAttr( 'xmlns', url )
-                            return proxy
-                        },
-                        get: ( _, nsPrefix ) => {
-                            return ( url ) => {
-                                element.setAttr( `xmlns:${nsPrefix}`, url )
-                                this.declaredNamespaces.add( nsPrefix )
-                                return proxy
-                            }
-                        }
-                    }
-                    return new Proxy( () => {}, nsHandler )
+                //special getters
+                if ( prop in specialGetters ) {
+                    return specialGetters[prop]( element, this, proxy )
                 }
-
-                return ( ...args ) => {
-                    element.setAttr( prop, args[0] )
+                //attributes
+                return ( value ) => {
+                    element.setAttr( prop, value )
                     return proxy
                 }
             },
+            //add childrens
             apply: ( _, __, args ) => fn( ...args )
         }
 
         const proxy = new Proxy( fn, handler )
         return proxy
     }
+
+    /**
+     * Creates a new XML comment node.
+     * @param {string} content - The text content of the comment.
+     * @returns {XMLComment} - A new comment node.
+     */
     createComment( content ) {
         return new XMLComment( content )
     }
 }
+
 export default XMLGenerator
+

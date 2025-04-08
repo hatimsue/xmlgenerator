@@ -36,7 +36,7 @@ class XMLElement {
      * Add an attribute to the xml element
      * @param {string} key - attribute name
      * @param {string} value - attribute value
-     * @returns XMLElement
+     * @returns {this}
      */
     setAttr( key, value ) {
         validateName( key, 'Attribute' )
@@ -50,7 +50,7 @@ class XMLElement {
     /**
      * add an xml child element to the xml element.
      * @param {XMLChild} child
-     * @returns {XMLElement}
+     * @returns {this}
      */
     addChild( child ) {
         if ( typeof child === 'string' || child instanceof XMLElement || child instanceof XMLComment ) {
@@ -64,7 +64,7 @@ class XMLElement {
     /**
      * add one or more xml children to the xml element.
      * @param {XMLChild[]} children
-     * @returns {XMLElement}
+     * @returns {this}
      */
     addChildren( ...children ) {
         this.children.push( ...children.flat() )
