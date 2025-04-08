@@ -1,14 +1,17 @@
+import XMLBase from './XMLBase.js'
+
 /**
  * Represents an xml comment
  * @class
  */
-class XMLComment {
+class XMLComment extends XMLBase {
 
     /**
      * constructor.
      * @param {string} content
      */
     constructor( content ) {
+        super()
         if ( /--/.test( content ) ) {
             throw new Error( 'XML comments cannot contain \'--\'' )
         }
@@ -28,7 +31,7 @@ class XMLComment {
 
     /**
      * Returns a formatted (indented and multiline) XML comment string.
-     * @param {number} [indent] - The indentation level (number of tab levels).
+     * @param {number} indent - The indentation level (number of tab levels).
      * @returns {string} A pretty-printed XML comment string.
      */
     toPrettyXML( indent = 0 ) {

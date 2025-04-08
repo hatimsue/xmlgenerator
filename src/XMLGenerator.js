@@ -1,4 +1,6 @@
 import specialGetters from './specialGetters.js'
+import XMLBase from './XMLBase.js'
+import XMLCData from './XMLCData.js'
 import XMLComment from './XMLComment.js'
 import XMLElement from './XMLElement.js'
 
@@ -11,11 +13,16 @@ class XMLGenerator {
      */
     constructor() {
 
+        //stores the namespaces in the current instance (node)
         this.declaredNamespaces = new Set()
-        this._ = new Proxy( {}, {
+        //this creates a proxy to a XMLElement|XMLComment instance
+        this.builder = new Proxy( {}, {
             get: ( _, tag ) => {
-                if ( tag === 'comment' ) {
+                if ( tag === '$comment' ) {
                     return ( text ) => this.createComment( text )
+                }
+                if ( tag === '$cdata' ) {
+                    return ( text ) => this.createCData( text )
                 }
                 if ( this.declaredNamespaces.has( tag ) ) {
                     return new Proxy( {}, {
@@ -34,13 +41,26 @@ class XMLGenerator {
      */
     createElement( name ) {
         const element = new XMLElement( { name } )
+
         const fn = ( ...args ) => {
-            element.addChildren( ...args )
+            // solo pasar strings o elementos válidos (como `element.element`)
+            const children = args.map( arg => {
+                if ( typeof arg === 'string' ) return arg
+                if ( arg instanceof XMLBase ) return arg
+                if ( arg?.$element instanceof XMLBase ) return arg.$element
+            } )
+
+            element.addChildren( ...children )
             return proxy
         }
 
+
         const handler = {
             get: ( _, prop ) => {
+                //returns the xmlelement instance
+                if ( prop === '$element' ) {
+                    return element // 👈 Aquí devolvemos el real
+                }
                 //special getters
                 if ( prop in specialGetters ) {
                     return specialGetters[prop]( element, this, proxy )
@@ -56,6 +76,7 @@ class XMLGenerator {
         }
 
         const proxy = new Proxy( fn, handler )
+        proxy.$element = element
         return proxy
     }
 
@@ -67,6 +88,16 @@ class XMLGenerator {
     createComment( content ) {
         return new XMLComment( content )
     }
+
+    /**
+     * Creates a new CDATA node.
+     * @param {string} content - The text content of the CDATA section.
+     * @returns {XMLCData} - A new CDATA node.
+     */
+    createCData( content ) {
+        return new XMLCData( content )
+    }
+
 }
 
 export default XMLGenerator

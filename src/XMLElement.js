@@ -1,7 +1,8 @@
-import {validateName} from './utils.js'
-import XMLComment from './XMLComment.js'
+import { validateName } from './utils.js'
+import XMLBase from './XMLBase.js'
+
 /**
- * @typedef {(string|XMLComment|XMLElement)} XMLChild - A child node of an XML element: text, a comment, or a nested element.
+ * @typedef {(string | XMLBase)} XMLChild - A child node of an XML element: text or any XML node.
  */
 
 /**
@@ -11,16 +12,17 @@ import XMLComment from './XMLComment.js'
  * @property {Object.<string, string>} [attributes] - Optional attributes for the element
  */
 
-
 /**
- * Represents an XMLelement
+ * Represents an XML element node.
  * @class
+ * @augments XMLBase
  */
-class XMLElement {
+class XMLElement extends XMLBase {
     /**
-     * @param {XMLElementOptions} options - xml element options
+     * @param {XMLElementOptions} options - XML element options
      */
     constructor( { name, children = [], attributes = {} } ) {
+        super()
         validateName( name, 'Tag' )
         this.name = name
         this.children = []
@@ -30,12 +32,13 @@ class XMLElement {
             this.setAttr( key, value )
         }
 
-        children.forEach( child => this.addChild( child ) )    }
+        children.forEach( child => this.addChild( child ) )
+    }
 
     /**
-     * Add an attribute to the xml element
-     * @param {string} key - attribute name
-     * @param {string} value - attribute value
+     * Adds an attribute to the element.
+     * @param {string} key - Attribute name
+     * @param {string} value - Attribute value
      * @returns {this}
      */
     setAttr( key, value ) {
@@ -48,33 +51,34 @@ class XMLElement {
     }
 
     /**
-     * add an xml child element to the xml element.
+     * Adds a child node or text content.
      * @param {XMLChild} child
      * @returns {this}
      */
     addChild( child ) {
-        if ( typeof child === 'string' || child instanceof XMLElement || child instanceof XMLComment ) {
+        if ( typeof child === 'string' || child instanceof XMLBase ) {
             this.children.push( child )
         } else {
-            throw new Error( 'Invalid child node' )
+            console.log( child )
+            console.log( typeof child )
+            throw new Error( 'Invalid child node: must be string or instance of XMLBase' )
         }
         return this
     }
 
     /**
-     * add one or more xml children to the xml element.
+     * Adds one or more child nodes.
      * @param {XMLChild[]} children
      * @returns {this}
      */
     addChildren( ...children ) {
-        this.children.push( ...children.flat() )
+        children.flat().forEach( child => this.addChild( child ) )
         return this
     }
 
     /**
-     * Serializes this XML element and its children into an XML string.
-     * The resulting string does not include line breaks or indentation.
-     * @returns {string} xmlString - A compact XML string representation of the element.
+     * Serializes this XML element and its children into a compact XML string.
+     * @returns {string}
      */
     toXML() {
         let xmlString = `<${this.name}`
@@ -94,9 +98,9 @@ class XMLElement {
     }
 
     /**
-     * Serializes this XML element and its children into a formatted, human-readable XML string.
-     * @param {number} [indent] - The current indentation level. Used internally for recursive formatting.
-     * @returns {string} prettyXML - A formatted XML string with indentation and line breaks.
+     * Serializes this XML element and its children into a pretty-printed XML string.
+     * @param {number} indent - Indentation level.
+     * @returns {string}
      */
     toPrettyXML( indent = 0 ) {
         const tab = '  '.repeat( indent )
@@ -108,9 +112,7 @@ class XMLElement {
                 .join( ' ' )
         }
 
-        const hasChildren = this.children.length > 0
-
-        if ( !hasChildren ) {
+        if ( this.children.length === 0 ) {
             result += ' />\n'
             return result
         }
@@ -129,7 +131,6 @@ class XMLElement {
         result += `${tab}</${this.name}>\n`
         return result
     }
-
 }
 
 export default XMLElement

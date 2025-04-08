@@ -40,9 +40,9 @@ function xmlnsGetter( element, generator, proxy ) {
 }
 
 const specialGetters = {
-    toXML: toXMLGetter,
-    toPrettyXML: toPrettyXMLGetter,
-    xmlns: xmlnsGetter
+    $toXML: toXMLGetter,
+    $toPrettyXML: toPrettyXMLGetter,
+    $xmlns: xmlnsGetter
 }
 
 export default specialGetters

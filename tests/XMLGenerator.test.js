@@ -1,74 +1,99 @@
 import XMLComment from '../src/XMLComment.js'
 import XMLGenerator from '../src/XMLGenerator.js'
 
-describe( 'XMLGenerator', () => {
+describe( 'XMLGenerator - creación básica', () => {
     let _
 
     beforeEach( () => {
-        _ = ( new XMLGenerator() )._
+        _ = ( new XMLGenerator() ).builder
     } )
 
-    test( 'should create a simple element with tag name', () => {
+    test( 'debe crear un elemento con nombre de etiqueta', () => {
         const el = _.foo
         expect( el ).toBeDefined()
-        expect( typeof el.toXML ).toBe( 'function' )
+        expect( typeof el.$toXML ).toBe( 'function' )
     } )
 
-    test( 'should create a comment node', () => {
-        const comment = _.comment( 'hello' )
-        expect( comment ).toBeInstanceOf( XMLComment )
-        expect( comment.content ).toBe( 'hello' )
-    } )
-
-    test( 'should add attributes to an element', () => {
+    test( 'debe permitir añadir atributos a un elemento', () => {
         const el = _.foo().id( '123' ).class( 'test' )
-        const xmlString = el.toXML()
+        const xmlString = el.$toXML()
         expect( xmlString ).toContain( 'id="123"' )
         expect( xmlString ).toContain( 'class="test"' )
     } )
 
-    test( 'should add children elements and text', () => {
+    test( 'debe permitir añadir hijos y texto', () => {
         const el = _.foo(
             _.bar( 'hello' ),
             'world'
         )
-        const xmlString = el.toXML()
+        const xmlString = el.$toXML()
         expect( xmlString ).toContain( '<bar>hello</bar>' )
         expect( xmlString ).toContain( 'world' )
     } )
 
-    test( 'should support toPrettyXML()', () => {
+    test( 'debe soportar toPrettyXML()', () => {
         const el = _.foo().id( 'x' )
-        const pretty = el.toPrettyXML()
+        const pretty = el.$toPrettyXML()
         expect( pretty ).toContain( '<foo id="x"' )
         expect( pretty ).toMatch( /<foo id="x" ?\/?>/ )
     } )
+} )
 
-    test( 'should support xmlns declarations', () => {
-        const el = _.foo().xmlns( 'http://default.namespace' )
-        const str = el.toXML()
+describe( 'XMLGenerator - comentarios', () => {
+    let _
+
+    beforeEach( () => {
+        _ = ( new XMLGenerator() ).builder
+    } )
+
+    test( 'debe crear un nodo de comentario', () => {
+        const comment = _.$comment( 'hello' )
+        expect( comment ).toBeInstanceOf( XMLComment )
+        expect( comment.content ).toBe( 'hello' )
+    } )
+} )
+
+describe( 'XMLGenerator - namespaces', () => {
+    let _
+
+    beforeEach( () => {
+        _ = ( new XMLGenerator() ).builder
+    } )
+
+    test( 'debe soportar declaración xmlns', () => {
+        const el = _.foo().$xmlns( 'http://default.namespace' )
+        const str = el.$toXML()
         expect( str ).toContain( 'xmlns="http://default.namespace"' )
     } )
 
-    test( 'should support prefixed xmlns declarations', () => {
-        const el = _.foo().xmlns.bar( 'http://bar.namespace' )
-        const str = el.toXML()
+    test( 'debe soportar declaración xmlns con prefijo', () => {
+        const el = _.foo().$xmlns.bar( 'http://bar.namespace' )
+        const str = el.$toXML()
         expect( str ).toContain( 'xmlns:bar="http://bar.namespace"' )
     } )
 
-    test( 'should support namespaced elements after xmlns declaration', () => {
-        _.foo().xmlns.bar( 'http://bar.namespace' )
+    test( 'debe permitir elementos con prefijos después de declarar xmlns', () => {
+        _.foo().$xmlns.bar( 'http://bar.namespace' )
         const el = _.bar.baz( 'test' )
-        const xmlStr = el.toXML()
+        const xmlStr = el.$toXML()
         expect( xmlStr ).toContain( '<bar:baz>test</bar:baz>' )
     } )
-    test( 'should generate a complex nested XML structure with namespaces, attributes, and mixed content', () => {
-        const data = [ 'one', 'two', 'three' ]
+} )
+
+describe( 'XMLGenerator - estructuras complejas', () => {
+    let _
+
+    beforeEach( () => {
+        _ = ( new XMLGenerator() ).builder
+    } )
+
+    test( 'debe generar estructura XML anidada con namespaces, atributos y contenido mixto', () => {
+        const data = ['one', 'two', 'three']
         const block = val => _.div.class( 'block' )( val )
 
         const el = _.section
-            .xmlns( 'https://www.w3.org/2000/svg' )
-            .xmlns.ns( 'https://xxx.sss.sss' )
+            .$xmlns( 'https://www.w3.org/2000/svg' )
+            .$xmlns.ns( 'https://xxx.sss.sss' )
             .class( 'content-wrapper' )
             .id( 'intro-section' )(
                 _.ns.h1.class( 'title' ).lang( 'en' )( 'Welcome' ),
@@ -78,7 +103,7 @@ describe( 'XMLGenerator', () => {
                     ' example of mixed content.'
                 ),
                 _.ul.class( 'features' )(
-                    _.comment( 'this is a test' ),
+                    _.$comment( 'this is a test' ),
                     _.li( 'Clean syntax' ),
                     _.li( 'Composable elements' ),
                     _.li( 'Mixed content support' )
@@ -86,9 +111,8 @@ describe( 'XMLGenerator', () => {
                 _.subsection( ...data.map( val => block( val ) ) )
             )
 
-        const xml = el.toXML()
+        const xml = el.$toXML()
 
-        // Aserciones mínimas para verificar que todo esté renderizado
         expect( xml ).toContain( 'xmlns="https://www.w3.org/2000/svg"' )
         expect( xml ).toContain( 'xmlns:ns="https://xxx.sss.sss"' )
         expect( xml ).toContain( '<ns:h1 class="title" lang="en">Welcome</ns:h1>' )
@@ -101,5 +125,23 @@ describe( 'XMLGenerator', () => {
         expect( xml ).toContain( '<div class="block">two</div>' )
         expect( xml ).toContain( '<div class="block">three</div>' )
     } )
-
 } )
+
+
+describe( 'XMLGenerator - CDATA', () => {
+    let _
+    beforeEach( () => {
+        _ = new XMLGenerator().builder
+    } )
+
+    test( 'should insert CDATA inside an element', () => {
+        const root = _.root(
+            _.$cdata( 'some <encoded> content' )
+        )
+        const result = root.$element.toXML()
+        expect( result ).toContain( '<root>' )
+        expect( result ).toContain( '<![CDATA[some <encoded> content]]>' )
+        expect( result ).toContain( '</root>' )
+    } )
+} )
+
