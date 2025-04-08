@@ -1,86 +1,33 @@
-<Libraries xmlns:lib="http://example.org/library" xmlns:book="http://example.org/book" xmlns:auth="http://example.org/author">
-  <!--
-  
-  This XML describes a library system.
-  It includes detailed info about libraries, books, and authors.
-  All elements are properly namespaced and attributed.
-  
-  -->
-  <lib_Library id="LIB001" country="USA" status="active">
-    <lib_Name>
-      Downtown Public Library
-    </lib_Name>
-    <lib_Location city="New York" zipcode="10001">
-      <lib_Address>
-        456 Library Ave
-      </lib_Address>
-      <lib_Phone>
-        +1 212-555-0198
-      </lib_Phone>
-    </lib_Location>
-    <!-- Books available in the library -->
-    <lib_Books>
-      <book_Book isbn="9780141439518" language="en" status="available">
-        <book_Title>
-          Pride and Prejudice
-        </book_Title>
-        <book_Author>
-          Jane Austen
-        </book_Author>
-        <book_Year>
-          1813
-        </book_Year>
-        <book_Genre>
-          Classic Literature
-        </book_Genre>
-      </book_Book>
-      <book_Book isbn="9780743273565" language="en" status="checked-out">
-        <book_Title>
-          The Great Gatsby
-        </book_Title>
-        <book_Author>
-          F. Scott Fitzgerald
-        </book_Author>
-        <book_Year>
-          1925
-        </book_Year>
-        <book_Genre>
-          Novel
-        </book_Genre>
-      </book_Book>
-      <book_Book isbn="9780062315007" language="es" status="available">
-        <book_Title>
-          One Hundred Years of Solitude
-        </book_Title>
-        <book_Author>
-          Gabriel García Márquez
-        </book_Author>
-        <book_Year>
-          1967
-        </book_Year>
-        <book_Genre>
-          Magical Realism
-        </book_Genre>
-      </book_Book>
-    </lib_Books>
-    <!-- Notable authors featured -->
-    <lib_Authors>
-      <auth_Author country="UK" birthYear="1775" deceasedYear="1817">
-        <auth_Name>
-          Jane Austen
-        </auth_Name>
-      </auth_Author>
-      <auth_Author country="USA" birthYear="1896" deceasedYear="1940">
-        <auth_Name>
-          F. Scott Fitzgerald
-        </auth_Name>
-      </auth_Author>
-      <auth_Author country="Colombia" birthYear="1927" deceasedYear="2014">
-        <auth_Name>
-          Gabriel García Márquez
-        </auth_Name>
-      </auth_Author>
-    </lib_Authors>
-  </lib_Library>
-</Libraries>
+<Library xmlns="http://example.org/library" xmlns:bk="http://example.org/book" location="UK">
+  <!-- This is a library XML document -->
+  <bk:Books genre="fantasy">
+    <bk:Book lang="en">
+      <bk:Author>
+        J.K. Rowling
+      </bk:Author>
+      <bk:Name>
+        A book by J.K. Rowling
+      </bk:Name>
+    </bk:Book>
+    <bk:Book lang="en">
+      <bk:Author>
+        J.R.R. Tolkien
+      </bk:Author>
+      <bk:Name>
+        A book by J.R.R. Tolkien
+      </bk:Name>
+    </bk:Book>
+    <bk:Book lang="en">
+      <bk:Author>
+        George R.R. Martin
+      </bk:Author>
+      <bk:Name>
+        A book by George R.R. Martin
+      </bk:Name>
+    </bk:Book>
+  </bk:Books>
+  <bk:ExtraInfo>
+<![CDATA[Some unparsed <CDATA> content goes here & should not be escaped.]]>
+  </bk:ExtraInfo>
+</Library>
 
