@@ -134,23 +134,21 @@ console.log(xmlDocument.$toPrettyXML())
 
 ### Reference
 
-| **Concept**                    | **Description**                                         | **Syntax / Example**                              | **Expected XML Output** |
-|--------------------------------|---------------------------------------------------------|---------------------------------------------------|--------------------------|
-| **Create a tag**               | Tags are created by calling a method with the tag name. | `_.Book()`                                        | `<Book/>`               |
-| **Add content**                | Pass child nodes or text content as arguments.          | `_.Book('Title')`                                 | `<Book>Title</Book>`    |
-| **Add attribute**              | Add attribute by chaining method before final `()`.     | `_.Book.lang('en')()`                             | `<Book lang="en"/>`     |
-| **Chain attributes**           | Add multiple attributes.                                | `_.Book.lang('en').year('2001')()`                | `<Book lang="en" year="2001"/>` |
-| **Add default namespace**      | Declare default XML namespace.                          | `_.Books._$xmlns('http://example.org')()`         | `<Books xmlns="http://example.org"/>` |
-| **Add namespaced prefix**      | Add namespace with prefix.                              | `_.Books._$xmlns.lib('http://example.org/lib')()` | `<Books xmlns:lib="http://example.org/lib"/>` |
-| **Use namespaced tags**        | Tags under a namespace prefix.                          | `_.lib.Book()`                                    | `<lib:Book/>`           |
-| **Add comment**                | One-line or multiline comment.                          | `_._$comment('Note here')`                        | `<!-- Note here -->`    |
-| **Add CDATA section**          | Escape content with special characters.                 | `_._$cdata('<tag>')`                              | `<![CDATA[<tag>]]>`     |
-| **Use a loop/dynamic content** | Use any array function with `...`.                      | `...['a','b'].map(n => _.Name(n))`                | `<Name>a</Name>\n<Name>b</Name>` |
-| **Single line output**         | One-line comments render inline.                        | `_._$comment('inline comment')`                   | `<!-- inline comment -->` |
-| **Multiline XML output**       | Indented, readable XML.                                 | `element.$toPrettyXML()`                          | (pretty printed XML)    |
-| **Minified XML output**        | Compact XML with no indentation.                        | `element.$toXML()`                                | (single-line XML)       |
-| **Root element**               | Begin document with root node.                          | `const xml = _.Library(...)`                      | `<Library>...</Library>` |
-| **Output XML**                 | Print XML string to console.                            | `console.log(xml.$toPrettyXML())`                 | Console output          |
-
+| **Concept**                    | **Description**                                                                 | **Syntax / Example**                              | **Expected XML Output**                   |
+|--------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------|--------------------------------------------|
+| **Create a tag**               | Use a method named after the tag to create it. Must be called with `()`.        | `_.Book()`                                        | `<Book/>`                                  |
+| **Add content**                | Pass strings or nested tags as arguments inside the parentheses.                | `_.Book('Title')`                                 | `<Book>Title</Book>`                       |
+| **Add attribute**              | Chain attribute methods before calling the tag with `()`.                       | `_.Book.lang('en')()`                             | `<Book lang="en"/>`                        |
+| **Chain attributes**           | Chain multiple attribute methods before final `()`.                             | `_.Book.lang('en').year('2001')()`                | `<Book lang="en" year="2001"/>`           |
+| **Add default namespace**      | Call `_$xmlns(url)` on the element before `()`.                                | `_.Books._$xmlns('http://example.org')()`         | `<Books xmlns="http://example.org"/>`     |
+| **Add namespaced prefix**      | Use `_$xmlns.prefix(url)` to declare namespaced prefixes.                       | `_.Books._$xmlns.lib('http://example.org/lib')()` | `<Books xmlns:lib="http://example.org/lib"/>` |
+| **Use namespaced tags**        | Use prefix as property (e.g., `_.lib.TagName()`) after declaring it.            | `_.lib.Book()`                                    | `<lib:Book/>`                              |
+| **Add comment**                | Insert with `_.$comment('text')` as a child element.                           | `_.$comment('Note here')`                         | `<!-- Note here -->`                       |
+| **Add CDATA section**          | Use `_.$cdata('value')` to wrap raw XML content safely.                         | `_.$cdata('<tag>')`                               | `<![CDATA[<tag>]]>`                        |
+| **Use a loop/dynamic content** | Use spread syntax with `.map()` or other loops that return tag arrays.          | `...['a','b'].map(n => _.Name(n))`                | `<Name>a</Name>\n<Name>b</Name>`          |
+| **Single line output**         | Use `$toXML()` to generate compact XML string.                                 | `element.$toXML()`                                | `<Book><Author>J.K.</Author></Book>`      |
+| **Multiline XML output**       | Use `$toPrettyXML()` to output indented XML for readability.                   | `element.$toPrettyXML()`                          | Formatted multi-line XML                  |
+| **Root element**               | Start your XML tree from a top-level tag like `_.Library(...)`.                 | `const xml = _.Library(...)`                      | `<Library>...</Library>`                   |
+| **Output XML**                 | Log or return the result from `$toXML()` or `$toPrettyXML()`.                  | `console.log(xml.$toPrettyXML())`                 | Console output of the XML                 |
 
 
