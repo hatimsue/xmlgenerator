@@ -1,5 +1,5 @@
 {
-  "name": "xmlgenerator",
+  "name": "@hatimsue/xmlgenerator",
   "version": "1.0.0",
   "description": "A lightweight JavaScript library to generate XML using a declarative syntax.",
   "license": "MIT",
