@@ -1,3 +1,7 @@
+<!-- ![Build Status](https://img.shields.io/github/actions/workflow/status/hatimsue/xmlgenerator/main.yml?branch=main) -->
+![npm](https://img.shields.io/npm/v/@hatimsue/xmlgenerator)
+![Status](https://img.shields.io/badge/status-development-yellow)
+
 ## xmlgenerator
 
 A lightweight JavaScript library for building XML documents using a clean, declarative syntax.
