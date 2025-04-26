@@ -106,7 +106,12 @@ class XMLElement extends XMLBase {
         const tab = '  '.repeat( indent )
         let result = `${tab}<${this.name}`
 
-        if ( Object.keys( this.attributes ).length > 0 ) {
+        const hasAttributes = Object.keys( this.attributes ).length > 0
+        const hasSingleTextChild =
+            this.children.length === 1 &&
+            typeof this.children[0] === 'string'
+
+        if ( hasAttributes ) {
             result += ' ' + Object.entries( this.attributes )
                 .map( ( [key, value] ) => `${key}="${value}"` )
                 .join( ' ' )
@@ -114,6 +119,12 @@ class XMLElement extends XMLBase {
 
         if ( this.children.length === 0 ) {
             result += ' />\n'
+            return result
+        }
+
+        //if (!hasAttributes && hasSingleTextChild) {
+        if ( hasSingleTextChild ) {
+            result += `>${this.children[0]}</${this.name}>\n`
             return result
         }
 

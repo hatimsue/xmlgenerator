@@ -58,9 +58,7 @@ describe( 'XMLElement', () => {
         const parent = new XMLElement( { name: 'parent' } ).addChild( child )
         const expected =
 `<parent>
-  <child color="red">
-    data
-  </child>
+  <child color="red">data</child>
 </parent>
 `
         expect( parent.toPrettyXML() ).toBe( expected )
@@ -75,9 +73,7 @@ describe( 'XMLElement', () => {
 `<root>
   text
   <!-- comment -->
-  <child>
-    hello
-  </child>
+  <child>hello</child>
 </root>
 `
         expect( root.toPrettyXML() ).toBe( expected )
