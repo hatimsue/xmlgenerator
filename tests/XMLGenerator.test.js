@@ -1,4 +1,5 @@
-import XMLComment from '../src/XMLComment.js'
+import {XMLComment} from '@hatimsue/xml-core'
+
 import XMLGenerator from '../src/XMLGenerator.js'
 
 describe( 'XMLGenerator - creación básica', () => {

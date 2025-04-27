@@ -1,8 +1,6 @@
+import {XMLBase, XMLCData, XMLComment, XMLElement} from '@hatimsue/xml-core'
+
 import specialGetters from './specialGetters.js'
-import XMLBase from './XMLBase.js'
-import XMLCData from './XMLCData.js'
-import XMLComment from './XMLComment.js'
-import XMLElement from './XMLElement.js'
 
 /**
  * @class

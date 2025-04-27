@@ -1,6 +1,6 @@
 {
   "name": "@hatimsue/xmlgenerator",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A lightweight JavaScript library to generate XML using a declarative syntax.",
   "license": "MIT",
   "author": "github/hatimsue",
@@ -17,11 +17,21 @@
     "url": "https://github.com/hatimsue/xmlgenerator/issues"
   },
   "homepage": "https://github.com/hatimsue/xmlgenerator#readme",
-  "keywords": ["xml", "generator", "builder" ,"xml-builder", "declarative", "javascript", "xmlgenerator", "xml-generator"],
+  "keywords": [
+    "xml",
+    "generator",
+    "builder",
+    "xml-builder",
+    "declarative",
+    "javascript",
+    "xmlgenerator",
+    "xml-generator"
+  ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "doc": "jsdoc src -d docs"
+    "doc": "jsdoc src -d docs",
+    "doc:api": "jsdoc2md src/* > API.md"
   },
   "devDependencies": {
     "eslint": "^9.22.0",
@@ -36,6 +46,8 @@
     "README.md",
     "API.md",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "@hatimsue/xml-core": "^1.0.0"
+  }
 }
-
